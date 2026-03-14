@@ -1,0 +1,80 @@
+import wixData from 'wix-data';
+
+export function addMemberToMembersCollection(newMemberResult) {
+    let toInsert = {
+        // 'memberId': newMemberResult.member._id,
+        'email': newMemberResult.member.loginEmail
+    };
+
+    wixData.insert("Members", toInsert)
+    .then((results) => {  
+        console.log('insert success!')                        	        
+        return results;
+    })
+    .catch((err) => {
+        let errorMsg = err;
+        console.log(errorMsg, 'insert function fail')
+        return err;
+    })
+}
+
+export function addRiderToRidersCollection(toInsertFromFront) {	    
+    console.log('addRider running' + toInsertFromFront)
+    return wixData.insert("Riders", toInsertFromFront)
+        .then((results) => {
+            let item = results; //see item below		
+            console.log('inserted item: ' + item);
+            return item;
+        })
+        .catch((err) => {
+            let errorMsg = err;
+            console.log(errorMsg)
+            return errorMsg;
+    });
+}
+
+export function addRidersToMembersCollectionItem(updatedItem) {	    
+    // console.log('running' + idOfRiderItem, idOfMemberItem)
+    return wixData.update("Members", updatedItem)
+        .then((results) => {
+            let item = results; //see item below		
+            console.log('inserted reference! ' + item);
+            return item;
+        })
+        .catch((err) => {
+            let errorMsg = err;
+            console.log(errorMsg)
+            return errorMsg;
+    });
+}
+
+
+export function updateRider(updatedItem) {	    
+    // console.log('running' + idOfRiderItem, idOfMemberItem)
+    return wixData.update("Riders", updatedItem)
+        .then((results) => {
+            let item = results; //see item below		            
+            return item;
+        })
+        .catch((err) => {
+            let errorMsg = err;
+            console.log(errorMsg)
+            return errorMsg;
+    });
+}
+
+export function removeRider(riderId) {	        
+    return wixData.remove("Riders", riderId)
+        .then((results) => {            		            
+            return results;
+        })
+        .catch((err) => {
+            let errorMsg = err;
+            console.log(errorMsg)
+            return errorMsg;
+    });
+}
+
+
+
+

@@ -1,0 +1,32 @@
+import { fetch } from 'wix-fetch';
+
+/**
+ * Fetches and processes wait time data for an attraction.
+ * @param {string} attractionId - The ID of the attraction.
+ * @returns {Promise<Object>} - A promise resolving to an object with wait time data.
+ */
+export async function fetchWaitTimeData(attractionId) {
+    const url = 'https://api.themeparks.wiki/v1/entity/';
+    const fullUrl = `${url}${attractionId}/live`;
+
+    try {
+        const response = await fetch(fullUrl, { method: 'get' });
+        const json = await response.json();
+        const liveData = json.liveData[0];
+
+        return {
+            waitTime: liveData?.queue?.STANDBY?.waitTime ?? null,
+            status: liveData?.status || "Unknown",
+            lightningLanePrice: liveData?.queue?.PAID_RETURN_TIME?.price?.amount
+                ? `$${(liveData.queue.PAID_RETURN_TIME.price.amount / 100).toFixed(0)}`
+                : "",
+        };
+    } catch (error) {
+        console.error(`Error fetching wait time for attraction ${attractionId}:`, error);
+        return {
+            waitTime: null,
+            status: "Error",
+            lightningLanePrice: "N/A",
+        };
+    }
+}
