@@ -12,5 +12,6 @@ node_modules/
 
 # Build / cache
 dist/
+.next/
 .cache/
 *.log
